@@ -4,42 +4,38 @@
 #include "00.SceneMgr.h"
 #include "02.Chapter.h"
 
+//ç”»åƒ
+static int BackImage;	//èƒŒæ™¯
+static int CHAPTER_Lock_Image[5] = { 0 };	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼ãƒ­ãƒƒã‚¯ç”¨ã®ç”»åƒ
+static int CHAPTER_Image_[5] = {0};	 //ãƒãƒ£ãƒ—ã‚¿ãƒ¼é¸æŠç”»åƒ5æš
+static int CHAPTER_Image_Select[5] = { 0 };	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼é¸æŠæ™‚ã«å…‰ã‚‰ã›ã‚‹ãŸã‚ã®ç”»åƒ
 
-//‰æ‘œ
-static int BackImage;	//”wŒi
-static int CHAPTER_Lock_Image[5] = { 0 };	//ƒ`ƒƒƒvƒ^[ƒƒbƒN—p‚Ì‰æ‘œ
-static int CHAPTER_Image_[5] = {0};	 //ƒ`ƒƒƒvƒ^[‘I‘ğ‰æ‘œ5–‡
-static int CHAPTER_Image_Select[5] = { 0 };	//ƒ`ƒƒƒvƒ^[‘I‘ğ‚ÉŒõ‚ç‚¹‚é‚½‚ß‚Ì‰æ‘œ
-
-static int GoBack_Title;	//ƒ^ƒCƒgƒ‹‚É–ß‚éê—p‚Ì‰æ‘œ
+static int GoBack_Title;	//ã‚¿ã‚¤ãƒˆãƒ«ã«æˆ»ã‚‹å°‚ç”¨ã®ç”»åƒ
 static int backimage_ = 0;
 static int Setumei_Box;
 
-//BGM‚ÆSE
-static int ENTER_SE;	//Œˆ’èSE
-static int Title_BGM = 0;	//ƒ^ƒCƒgƒ‹BGMEƒ`ƒƒƒvƒ^[‚ÆƒRƒ“ƒtƒBƒO‚à“¯‚¶‹È
-static int Change_SE;	//ƒVƒtƒgƒL[ˆÚ“®‚ÌSE
+//BGMã¨SE
+static int ENTER_SE;	//æ±ºå®šæ™‚SE
+static int Title_BGM = 0;	//ã‚¿ã‚¤ãƒˆãƒ«BGMãƒ»ãƒãƒ£ãƒ—ã‚¿ãƒ¼ã¨ã‚³ãƒ³ãƒ•ã‚£ã‚°ã‚‚åŒã˜æ›²
+static int Change_SE;	//ã‚·ãƒ•ãƒˆã‚­ãƒ¼ç§»å‹•ã®SE
 
 
-//§Œä—pbool
-static bool init = false;	//‰Šú‰»—p
-static bool Finalize = false;	//	I—¹ˆ—
+//åˆ¶å¾¡ç”¨bool
+static bool init = false;	//åˆæœŸåŒ–ç”¨
+static bool Finalize = false;	//	çµ‚äº†å‡¦ç†
 static int MUSIC_STOP;
 
-static bool CHAPTER_Select_b[5] = { 1,0,0,0,0 };	//ƒ`ƒƒƒvƒ^[‘I‘ğ’†‚ÍƒuƒŒƒ“ƒhƒ‚[ƒh‚Å”­Œõ
+static bool CHAPTER_Select_b[5] = { 1,0,0,0,0 };	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼é¸æŠä¸­ã¯ãƒ–ãƒ¬ãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã§ç™ºå…‰
 
-//ƒZ[ƒuƒf[ƒ^ŠÇ—
+//ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ç®¡ç†
 save_deta_t save_data;
 FILE* fp;
 char* name = "sava_data.dat";
 
-
-
-//ƒ`ƒƒƒvƒ^[‰ğ•ú§Œä
+//ãƒãƒ£ãƒ—ã‚¿ãƒ¼è§£æ”¾åˆ¶å¾¡
 Chapter_Key Key;
 
-
-//‘I‘ğˆÚ“®—p•Ï”
+//é¸æŠç§»å‹•ç”¨å¤‰æ•°
 enum {
 	eChapter_0,
 	eChapter_1,
@@ -47,42 +43,30 @@ enum {
 	eChapter_3,
 	eChapter_4,
 	eChapter_Num,
-
 };
 
 static int NowSelect = eChapter_0;
 
-
-
-//‰Šú‰»
+//åˆæœŸåŒ–
 void Chapter_Initialize() {
 		
-		BackImage = LoadGraph("graphics/chapter_back.png"); //”wŒi‰æ‘œ‚Ì‰Šú‰»
+		BackImage = LoadGraph("graphics/chapter_back.png"); //èƒŒæ™¯ç”»åƒã®åˆæœŸåŒ–
 		Setumei_Box = LoadGraph("graphics/wafuu1.png");
 	
-		//ƒ`ƒƒƒvƒ^[‰æ‘œ
+		//ãƒãƒ£ãƒ—ã‚¿ãƒ¼ç”»åƒ
 		CHAPTER_Image_[0] = LoadGraph("graphics/Chapter_1.png");
 		CHAPTER_Image_[1] = LoadGraph("graphics/Chapter_2.png");
 		CHAPTER_Image_[2] = LoadGraph("graphics/Chapter_3.png");
 		CHAPTER_Image_[3] = LoadGraph("graphics/Chapter_4.png");
 		CHAPTER_Image_[4] = LoadGraph("graphics/Chapter_5.png");
 
-
-
-		for (int i = 0; i < 5; i++) {	//‘I‘ğ”­Œõ—p‰æ‘œ
-
+		for (int i = 0; i < 5; i++) {	//é¸æŠæ™‚ç™ºå…‰ç”¨ç”»åƒ
 			CHAPTER_Image_Select[i] = LoadGraph("graphics/Chapter_1_select.png");
-
 		}
 
-		for (int i = 0; i < 5; i++) {	//ƒAƒ“ƒƒbƒN—p‰æ‘œ
-
+		for (int i = 0; i < 5; i++) {	//ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ç”¨ç”»åƒ
 			CHAPTER_Lock_Image[i] = LoadGraph("graphics/Chapter_1_lock.png");
-
 		}
-
-		
-
 
 		//BGM
 		ENTER_SE = LoadSoundMem("sound/DECISION_SE.mp3");
@@ -90,100 +74,70 @@ void Chapter_Initialize() {
 		Change_SE = LoadSoundMem("sound/MOVE_CULSOL_SE.mp3");	
 
 		PlaySoundMem(Title_BGM,DX_PLAYTYPE_LOOP);
-
-		//backimage_ = LoadGraph("graphics/Backimage_0909.png");
-
-	
-		//ƒtƒ@ƒCƒ‹“à—e‚©‚çƒf[ƒ^‚ğƒ[ƒh
+		
+		//ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰
 		if ((fp = fopen(name, "rb")) == NULL) {
-
-			printf("ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“ƒGƒ‰[");
-
+			printf("ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³ã‚¨ãƒ©ãƒ¼");
 		}
 		else {
-
-			//ƒtƒ@ƒCƒ‹‚©‚çƒf[ƒ^‚ğ“Ç‚İ‚Ş
+			//ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 			fread(&save_data, sizeof(save_deta_t), 1, fp);
-			fclose(fp);	//‰ğ•ú
-						
+			fclose(fp);	//è§£æ”¾						
 			printf("chapter 1 = %d\n", save_data.s_Chapter_Unlock[1]);
 			printf("chapter 1 = %d\n", save_data.s_Chapter_Unlock[2]);
 			printf("chapter 1 = %d\n", save_data.s_Chapter_Unlock[3]);
-			printf("chapter 1 = %d\n", save_data.s_Chapter_Unlock[4]);
-			
-
+			printf("chapter 1 = %d\n", save_data.s_Chapter_Unlock[4]);			
 		}
 
 		for (int i = 0; i < 5; i++) {
 
 			if (save_data.s_Chapter_Unlock[i]) {
-
 				Key.Chapter_Unlock[i] = true;
-
 			}
 
-
 		}
-
-
-
-
-
-		
 		
 }
 
-//I—¹ˆ—
+//çµ‚äº†å‡¦ç†
 void Chapter_Finalize() {
 
 		for (int i = 0; i < 5; i++) {
-
 		DeleteGraph(CHAPTER_Image_[i]);
 		DeleteGraph(CHAPTER_Image_Select[i]);
 		DeleteGraph(CHAPTER_Lock_Image[i]);	
-
 		}
-
 		DeleteSoundMem(Title_BGM);
 		DeleteGraph(BackImage);
 		DeleteGraph(Title_BGM);
 		DeleteGraph(Change_SE);
-		DeleteGraph(ENTER_SE);
-	
-	
+		DeleteGraph(ENTER_SE);	
 }
 
 
-//XVEŒvZˆ—
+//æ›´æ–°ãƒ»è¨ˆç®—å‡¦ç†
 
-	//‰E‚ÉˆÚ“®
+	//å³ã«ç§»å‹•
 void Chapter_Update() {
 
-	DrawRotaGraph(512, 350, 1.0f, 0, backimage_, true);
-	
+	DrawRotaGraph(512, 350, 1.0f, 0, backimage_, true);	
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RIGHT)) {
 					
 		NowSelect = (NowSelect + 1) % eChapter_Num;
 		PlaySoundMem(Change_SE, DX_PLAYTYPE_BACK);
 		
-		for(int i = 0; i < 5; i++) {	//‘I‘ğ’†‚Ìƒ`ƒƒƒvƒ^[‚ğŒõ‚ç‚¹‚é
+		for(int i = 0; i < 5; i++) {	//é¸æŠä¸­ã®ãƒãƒ£ãƒ—ã‚¿ãƒ¼ã‚’å…‰ã‚‰ã›ã‚‹
 
 			if (NowSelect == i) {
-
 				CHAPTER_Select_b[i] = true;
-
 			}
 			else {
-
 				CHAPTER_Select_b[i] = false;
-
 			}
-
 		}
-
 	}
 
-	//¶‚ÉˆÚ“®
+	//å·¦ã«ç§»å‹•
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_LEFT)) {
 	
 		NowSelect = (NowSelect + (eChapter_Num - 1)) % eChapter_Num;
@@ -192,30 +146,22 @@ void Chapter_Update() {
 		for (int i = 0; i < 5; i++) {
 
 			if (NowSelect == i) {
-
 				CHAPTER_Select_b[i] = true;
-
 			}
 			else {
-
 				CHAPTER_Select_b[i] = false;
-
 			}
-
-		}
-
-		
+		}		
 	}
 
-	//‘I‘ğ’†‚Ì”Ô†‚ğƒGƒ“ƒ^[‚µ‚½‚çA‚»‚ÌƒV[ƒ“‚ÖˆÚs‚·‚éB
+	//é¸æŠä¸­ã®ç•ªå·ã‚’ã‚¨ãƒ³ã‚¿ãƒ¼ã—ãŸã‚‰ã€ãã®ã‚·ãƒ¼ãƒ³ã¸ç§»è¡Œã™ã‚‹ã€‚
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {
 
 		PlaySoundMem(ENTER_SE, DX_PLAYTYPE_BACK);
-
 		switch (NowSelect)	
 		{
 		case eChapter_0:
-				SceneMgr_ChangeScene(Novel_0);	//ƒvƒƒ[ƒO‚Ì‚½‚ßAí‚É‰ğ•ú
+				SceneMgr_ChangeScene(Novel_0);	//ãƒ—ãƒ­ãƒ­ãƒ¼ã‚°ã®ãŸã‚ã€å¸¸ã«è§£æ”¾
 				DeleteSoundMem(Title_BGM);
 				MUSIC_STOP = 0;
 				Finalize = true;
@@ -223,19 +169,17 @@ void Chapter_Update() {
 
 		case eChapter_1:
 			
-			if (Key.Chapter_Unlock[eChapter_1]) {	//ƒ`ƒƒƒvƒ^[0“Ç—¹‚Å‰ğ•ú
-				
+			if (Key.Chapter_Unlock[eChapter_1]) {	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼0èª­äº†ã§è§£æ”¾				
 				SceneMgr_ChangeScene(Game_1);
 				DeleteSoundMem(Title_BGM);
 				MUSIC_STOP = 0;
 				Finalize = true;
-
 			}
 				break;
 
 		case eChapter_2:
 			
-			if (Key.Chapter_Unlock[eChapter_2]) {	//ƒ`ƒƒƒvƒ^[1“Ç—¹‚Å‰ğ•ú
+			if (Key.Chapter_Unlock[eChapter_2]) {	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼1èª­äº†ã§è§£æ”¾
 				SceneMgr_ChangeScene(Novel_2);
 				MUSIC_STOP = 0;
 				Finalize = true;			
@@ -244,7 +188,7 @@ void Chapter_Update() {
 			
 		case eChapter_3:
 			
-			if (Key.Chapter_Unlock[eChapter_3]) {	//ƒ`ƒƒƒvƒ^[2“Ç—¹‚Å‰ğ•ú
+			if (Key.Chapter_Unlock[eChapter_3]) {	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼2èª­äº†ã§è§£æ”¾
 				
 				SceneMgr_ChangeScene(Novel_3);
 				MUSIC_STOP = 0;
@@ -255,34 +199,24 @@ void Chapter_Update() {
 
 		case eChapter_4:
 			
-			if (Key.Chapter_Unlock[eChapter_4]) {	//ƒ`ƒƒƒvƒ^[3“Ç—¹‚Å‰ğ•ú
+			if (Key.Chapter_Unlock[eChapter_4]) {	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼3èª­äº†ã§è§£æ”¾
 				SceneMgr_ChangeScene(Novel_4);
 				MUSIC_STOP = 0;
 				Finalize = true;
 			}			
 				break;
-
-
 		}
-
-
 	}
 
-	//ƒoƒbƒNƒXƒy[ƒXƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒ^ƒCƒgƒ‹‚ÖˆÚ“®
+	//ãƒãƒƒã‚¯ã‚¹ãƒšãƒ¼ã‚¹ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ã‚¿ã‚¤ãƒˆãƒ«ã¸ç§»å‹•
 	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_BACK)) {
-
 		SceneMgr_ChangeScene(Title);
 		Finalize = true;
-
 	}
 
-
-
-
-
 }
-//XV-ƒ`ƒƒƒvƒ^[§Œä‰ğœ—pŠÖ”
-void Chapter_Unlock(int *chapter_NUM) {		//ğŒƒNƒŠƒA’¼Œã‚ÉŒÄ‚Ño‚µAŠY“–ƒ`ƒƒƒvƒ^[‚Ö‚Ì§Œä‰ğœ‚·‚é
+//æ›´æ–°-ãƒãƒ£ãƒ—ã‚¿ãƒ¼åˆ¶å¾¡è§£é™¤ç”¨é–¢æ•°
+void Chapter_Unlock(int *chapter_NUM) {		//æ¡ä»¶ã‚¯ãƒªã‚¢ç›´å¾Œã«å‘¼ã³å‡ºã—ã€è©²å½“ãƒãƒ£ãƒ—ã‚¿ãƒ¼ã¸ã®åˆ¶å¾¡è§£é™¤ã™ã‚‹
 
 	int Num = *chapter_NUM;
 
@@ -298,7 +232,7 @@ void Chapter_Unlock(int *chapter_NUM) {		//ğŒƒNƒŠƒA’¼Œã‚ÉŒÄ‚Ño‚µAŠY“–ƒ`ƒƒƒvƒ
 	}
 	
 	if ((fp = fopen(name, "wb")) == NULL) {
-		printf("ƒtƒ@ƒCƒ‹ƒI[ƒvƒ“ƒGƒ‰[\n");
+		printf("ãƒ•ã‚¡ã‚¤ãƒ«ã‚ªãƒ¼ãƒ—ãƒ³ã‚¨ãƒ©ãƒ¼\n");
 	}
 	else {
 		fwrite(&save_data, sizeof(save_deta_t), 1, fp);
@@ -315,22 +249,22 @@ void Chapter_Unlock(int *chapter_NUM) {		//ğŒƒNƒŠƒA’¼Œã‚ÉŒÄ‚Ño‚µAŠY“–ƒ`ƒƒƒvƒ
 }
 
 
-//•`‰æ
+//æç”»
 void Chapter_Draw() {
 
-		int pos_x = 100;	//ƒ`ƒƒƒvƒ^[‰æ‘œÀ•W’²®—p
+		int pos_x = 100;	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼ç”»åƒåº§æ¨™èª¿æ•´ç”¨
 		int pos_y = 200;
 
-		DrawRotaGraph(512, 384, 0.95f, 0, BackImage,true);	//”wŒi‰æ‘œ
-		DrawRotaGraph(512, 630, 1.0f, 0, Setumei_Box, true);	//”wŒi‰æ‘œ
+		DrawRotaGraph(512, 384, 0.95f, 0, BackImage,true);	//èƒŒæ™¯ç”»åƒ
+		DrawRotaGraph(512, 630, 1.0f, 0, Setumei_Box, true);	//èƒŒæ™¯ç”»åƒ
 		
 
 		
-	for (int i = 0; i < 5; i++) {	//ƒ`ƒƒƒvƒ^[‰æ‘œ•`‰æ
+	for (int i = 0; i < 5; i++) {	//ãƒãƒ£ãƒ—ã‚¿ãƒ¼ç”»åƒæç”»
 
-		if (i % 2 != 0) {		//CHAPTER i ‚ªŠï”‚¾‚Á‚½‚ç
+		if (i % 2 != 0) {		//CHAPTER i ãŒå¥‡æ•°ã ã£ãŸã‚‰
 
-			pos_y = 400;	//y‚ÌˆÊ’u‚ğ’²®
+			pos_y = 400;	//yã®ä½ç½®ã‚’èª¿æ•´
 
 		}
 		else {
@@ -339,15 +273,15 @@ void Chapter_Draw() {
 
 		}
 
-		//‘I‘ğ’†‚Å‚ ‚éê‡‚ÍŒõ‚ç‚¹‚é
+		//é¸æŠä¸­ã§ã‚ã‚‹å ´åˆã¯å…‰ã‚‰ã›ã‚‹
 		if (CHAPTER_Select_b[i]) {	
 
 			if (CHAPTER_Select_b[0]) {
 
-				DrawStringEx(200, 600, -1, "Ÿn‚Ü‚è‚ÌÍiƒVƒiƒŠƒI‚Ì‚İjŸ");
-				DrawStringEx(200, 630, -1, "©@¨@ˆÚ“®‚Åƒ`ƒƒƒvƒ^[‚ğ‘I‘ğ‚Å‚«‚Ü‚·B");
-				DrawStringEx(200, 650, -1, "ENTERƒL[‚Å‚»‚ÌÍ‚És‚«‚Ü‚·B");
-				DrawStringEx(200, 670, -1, "ƒ^ƒCƒgƒ‹‚Ì–ß‚éê‡‚ÍABackSpeceƒL[‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B");
+				DrawStringEx(200, 600, -1, "â—†â—‡å§‹ã¾ã‚Šã®ç« ï¼ˆã‚·ãƒŠãƒªã‚ªã®ã¿ï¼‰â—‡â—†");
+				DrawStringEx(200, 630, -1, "â†ã€€â†’ã€€ç§»å‹•ã§ãƒãƒ£ãƒ—ã‚¿ãƒ¼ã‚’é¸æŠã§ãã¾ã™ã€‚");
+				DrawStringEx(200, 650, -1, "ENTERã‚­ãƒ¼ã§ãã®ç« ã«è¡Œãã¾ã™ã€‚");
+				DrawStringEx(200, 670, -1, "ã‚¿ã‚¤ãƒˆãƒ«ã®æˆ»ã‚‹å ´åˆã¯ã€BackSpeceã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚");
 
 
 
@@ -355,9 +289,9 @@ void Chapter_Draw() {
 
 			if (CHAPTER_Select_b[1]) {
 
-				DrawStringEx(200, 600, -1, "Ÿ“óÍi‡‚Ì‚İjŸ");
-				DrawStringEx(200, 630, -1, "‰ğ•úğŒFwn‚Ü‚è‚ÌÍx‚ğƒNƒŠƒA");
-				DrawStringEx(200, 650, -1, "‰ÔD‚ÉŸ—˜‚·‚é‚Æ©“®ƒZ[ƒu‚ª‚³‚ê‚Ü‚·B");
+				DrawStringEx(200, 600, -1, "â—†â—‡å¼ç« ï¼ˆè©¦åˆã®ã¿ï¼‰â—‡â—†");
+				DrawStringEx(200, 630, -1, "è§£æ”¾æ¡ä»¶ï¼šã€å§‹ã¾ã‚Šã®ç« ã€ã‚’ã‚¯ãƒªã‚¢");
+				DrawStringEx(200, 650, -1, "èŠ±æœ­ã«å‹åˆ©ã™ã‚‹ã¨è‡ªå‹•ã‚»ãƒ¼ãƒ–ãŒã•ã‚Œã¾ã™ã€‚");
 				
 
 
@@ -366,9 +300,9 @@ void Chapter_Draw() {
 
 			if (CHAPTER_Select_b[2]) {
 
-				DrawStringEx(200, 600, -1, "ŸQÍiƒVƒiƒŠƒIE‰ÔDjŸ");
-				DrawStringEx(200, 630, -1, "‰ğ•úğŒFw“óÍx‚ğƒNƒŠƒA");
-				DrawStringEx(200, 650, -1, "‰ÔD‚ÉŸ—˜‚·‚é‚Æ©“®ƒZ[ƒu‚ª‚³‚ê‚Ü‚·B");
+				DrawStringEx(200, 600, -1, "â—†â—‡å‚ç« ï¼ˆã‚·ãƒŠãƒªã‚ªãƒ»èŠ±æœ­ï¼‰â—‡â—†");
+				DrawStringEx(200, 630, -1, "è§£æ”¾æ¡ä»¶ï¼šã€å¼ç« ã€ã‚’ã‚¯ãƒªã‚¢");
+				DrawStringEx(200, 650, -1, "èŠ±æœ­ã«å‹åˆ©ã™ã‚‹ã¨è‡ªå‹•ã‚»ãƒ¼ãƒ–ãŒã•ã‚Œã¾ã™ã€‚");
 
 				
 
@@ -378,9 +312,9 @@ void Chapter_Draw() {
 
 			if (CHAPTER_Select_b[3]) {
 
-				DrawStringEx(200, 600, -1, "ŸlÍiƒVƒiƒŠƒIE‰ÔDjŸ");
-				DrawStringEx(200, 630, -1, "‰ğ•úğŒFwQÍx‚ğƒNƒŠƒA");
-				DrawStringEx(200, 650, -1, "‰ÔD‚ÉŸ—˜‚·‚é‚Æ©“®ƒZ[ƒu‚ª‚³‚ê‚Ü‚·B");
+				DrawStringEx(200, 600, -1, "â—†â—‡å››ç« ï¼ˆã‚·ãƒŠãƒªã‚ªãƒ»èŠ±æœ­ï¼‰â—‡â—†");
+				DrawStringEx(200, 630, -1, "è§£æ”¾æ¡ä»¶ï¼šã€å‚ç« ã€ã‚’ã‚¯ãƒªã‚¢");
+				DrawStringEx(200, 650, -1, "èŠ±æœ­ã«å‹åˆ©ã™ã‚‹ã¨è‡ªå‹•ã‚»ãƒ¼ãƒ–ãŒã•ã‚Œã¾ã™ã€‚");
 
 
 
@@ -388,9 +322,9 @@ void Chapter_Draw() {
 
 			if (CHAPTER_Select_b[4]) {
 
-				DrawStringEx(200, 600, -1, "ŸÅIÍiƒVƒiƒŠƒIE‰ÔDjŸ");
-				DrawStringEx(200, 630, -1, "‰ğ•úğŒFwlÍx‚ğƒNƒŠƒA");
-				DrawStringEx(200, 650, -1, "‰ÔD‚ÉŸ—˜‚·‚é‚Æ©“®ƒZ[ƒu‚ª‚³‚ê‚Ü‚·B");
+				DrawStringEx(200, 600, -1, "â—†â—‡æœ€çµ‚ç« ï¼ˆã‚·ãƒŠãƒªã‚ªãƒ»èŠ±æœ­ï¼‰â—‡â—†");
+				DrawStringEx(200, 630, -1, "è§£æ”¾æ¡ä»¶ï¼šã€å››ç« ã€ã‚’ã‚¯ãƒªã‚¢");
+				DrawStringEx(200, 650, -1, "èŠ±æœ­ã«å‹åˆ©ã™ã‚‹ã¨è‡ªå‹•ã‚»ãƒ¼ãƒ–ãŒã•ã‚Œã¾ã™ã€‚");
 
 
 
@@ -411,7 +345,7 @@ void Chapter_Draw() {
 									
 		}
 
-		//	‰æ‘œ‚Ì•\¦
+		//	ç”»åƒã®è¡¨ç¤º
 		if (Key.Chapter_Unlock[i]) {
 			
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 250);
@@ -420,7 +354,7 @@ void Chapter_Draw() {
 		}
 		else {
 
-		//ƒAƒ“ƒƒbƒN‰æ‘œ			
+		//ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ç”»åƒ			
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, 250);
 				DrawRotaGraph(pos_x + (i * 200), pos_y, 1.0f, 0, CHAPTER_Image_[i], true);
 
