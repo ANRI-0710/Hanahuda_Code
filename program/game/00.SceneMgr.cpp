@@ -14,42 +14,36 @@
 #include "04_03.HanahudaMgr.h"
 #include "04_04.HanahudaMgr.h"
 
-static eScene mNextScene = None;	//	Ÿ‚ÌƒV[ƒ“‚ÌŠÇ—•Ï”
-static eScene mScene = Title;	//	ƒV[ƒ“‚ÌŠÇ—•Ï”
+static eScene mNextScene = None;	//	æ¬¡ã®ã‚·ãƒ¼ãƒ³ã®ç®¡ç†å¤‰æ•°
+static eScene mScene = Title;	//	ã‚·ãƒ¼ãƒ³ã®ç®¡ç†å¤‰æ•°
 
-static void SceneMgr_InitalizeModule(eScene scene);	//	w’èƒ‚ƒWƒ…[ƒ‹‚Ì‰Šú‰»ˆ—‚ğs‚¤
-static void SceneMgr_FinalizeModule(eScene scene);	//w’è‚Ìƒ‚ƒWƒ…[ƒ‹‚ÌI—¹ˆ—‚ğs‚¤
+static void SceneMgr_InitalizeModule(eScene scene);	//	æŒ‡å®šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®åˆæœŸåŒ–å‡¦ç†ã‚’è¡Œã†
+static void SceneMgr_FinalizeModule(eScene scene);	//æŒ‡å®šã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®çµ‚äº†å‡¦ç†ã‚’è¡Œã†
 
 
-//‰Šú‰»
+//åˆæœŸåŒ–
 void SceneMgr_Initialize() {
-
-	SceneMgr_InitalizeModule(mScene);	//‘OƒV[ƒ“‚ÌI—¹ˆ—‚·‚é‚½‚ßA—\–ñˆ—
+	SceneMgr_InitalizeModule(mScene);	//å‰ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†ã™ã‚‹ãŸã‚ã€äºˆç´„å‡¦ç†
 }
 
-//I—¹ˆ—
+//çµ‚äº†å‡¦ç†
 void SceneMgr_Finalize() {
-
-	SceneMgr_FinalizeModule(mScene);	//‘OƒV[ƒ“‚ÌI—¹ˆ—‚·‚é‚½‚ßA—\–ñˆ—
-
+	SceneMgr_FinalizeModule(mScene);	//å‰ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†ã™ã‚‹ãŸã‚ã€äºˆç´„å‡¦ç†
 }
 
-//XVˆ—
+//æ›´æ–°å‡¦ç†
 void SceneMgr_Update() {
-
 	if (mNextScene != None) {
-
-		SceneMgr_FinalizeModule(mScene);	//Œ»İ‚ÌƒV[ƒ“‚ÌI—¹ˆ—‚ÌÀsE“¯ˆ—‚Í‚Å‚«‚È‚¢
-		mScene = mNextScene;	//Ÿ‚ÌƒV[ƒ“‚ğŒ»İ‚ÌƒV[ƒ“‚É
-		mNextScene = None; //Ÿ‚ÌƒV[ƒ“î•ñ‚ğƒNƒŠƒA
-		SceneMgr_InitalizeModule(mScene);	//ˆÚs‚µ‚½‚¢ƒV[ƒ“‚ğ‰Šú‰»‚·‚é
-
+		SceneMgr_FinalizeModule(mScene);	//ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã®çµ‚äº†å‡¦ç†ã®å®Ÿè¡Œãƒ»åŒæ™‚å‡¦ç†ã¯ã§ããªã„
+		mScene = mNextScene;	//æ¬¡ã®ã‚·ãƒ¼ãƒ³ã‚’ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã«
+		mNextScene = None; //æ¬¡ã®ã‚·ãƒ¼ãƒ³æƒ…å ±ã‚’ã‚¯ãƒªã‚¢
+		SceneMgr_InitalizeModule(mScene);	//ç§»è¡Œã—ãŸã„ã‚·ãƒ¼ãƒ³ã‚’åˆæœŸåŒ–ã™ã‚‹
 	}
 
-	switch (mScene)	{	//ƒV[ƒ“‚É‚æ‚Á‚ÄXVˆ—‚ğ•ªŠò
+	switch (mScene)	{	//ã‚·ãƒ¼ãƒ³ã«ã‚ˆã£ã¦æ›´æ–°å‡¦ç†ã‚’åˆ†å²
 		
-	case Title:	//Œ»İƒV[ƒ“‚ªƒ^ƒCƒgƒ‹‚Ìê‡
-		Title_Update();	//ŠeƒV[ƒ“‚ÌXV‚ğ‚·‚éAˆÈ‰ºÈ—ª
+	case Title:	//ç¾åœ¨ã‚·ãƒ¼ãƒ³ãŒã‚¿ã‚¤ãƒˆãƒ«ã®å ´åˆ
+		Title_Update();	//å„ã‚·ãƒ¼ãƒ³ã®æ›´æ–°ã‚’ã™ã‚‹ã€ä»¥ä¸‹çœç•¥
 		break;
 	case Chapter:
 		Chapter_Update();
@@ -60,39 +54,30 @@ void SceneMgr_Update() {
 	case Novel_1:
 		//Novel_CH_1_Update();
 		break;
-
 	case Novel_2:
 		Novel_CH_2_Update();
 		break;
-
 	case Novel_3:
 		Novel_CH_3_Update();
 		break;
-
 	case Novel_4:
 		Novel_CH_4_Update();
 		break;
-
 	case Novel_5:
 		Novel_CH_5_Update();
 		break;
-
 	case Game_1:
 		HanahudaMgr_Update();
 		break;
-
 	case Game_2:
 		HanahudaMgr_Update_2();
 		break;
-
 	case Game_3:
 		HanahudaMgr_Update_3();
 		break;
-
 	case Game_4:
 		HanahudaMgr_Update_4();
 		break;
-
 	case Config:
 		//Config_Update();
 		break;		
@@ -100,65 +85,54 @@ void SceneMgr_Update() {
 
 }
 
-//•`‰æˆ—
+//æç”»å‡¦ç†
 void SceneMgr_Draw() {
 
-	switch (mScene) {	//ƒV[ƒ“‚É‚æ‚Á‚ÄXVˆ—‚ğ•ªŠò
+	switch (mScene) {	//ã‚·ãƒ¼ãƒ³ã«ã‚ˆã£ã¦æ›´æ–°å‡¦ç†ã‚’åˆ†å²
 
-	case Title:	//Œ»İƒV[ƒ“‚ªƒ^ƒCƒgƒ‹‚Ìê‡
-		Title_Draw();	//ŠeƒV[ƒ“‚ÌXV‚ğ‚·‚éAˆÈ‰ºÈ—ª
+	case Title:	//ç¾åœ¨ã‚·ãƒ¼ãƒ³ãŒã‚¿ã‚¤ãƒˆãƒ«ã®å ´åˆ
+		Title_Draw();	//å„ã‚·ãƒ¼ãƒ³ã®æ›´æ–°ã‚’ã™ã‚‹ã€ä»¥ä¸‹çœç•¥
 		break;
 	case Chapter:
 		Chapter_Draw();
 		break;
-	case Novel_0:	//ƒmƒxƒ‹0˜biƒvƒƒ[ƒOj
+	case Novel_0:	//ãƒãƒ™ãƒ«0è©±ï¼ˆãƒ—ãƒ­ãƒ­ãƒ¼ã‚°ï¼‰
 		Novel_CH_1_Draw();
-		break;
-	
+		break;	
 	case Novel_1:
 		//Novel_CH_1_Draw();
 		break;
-
 	case Novel_2:
 		Novel_CH_2_Draw();
 		break;
-
 	case Novel_3:
 		Novel_CH_3_Draw();
 		break;
-
 	case Novel_4:
 		Novel_CH_4_Draw();
-		break;
-	
+		break;	
 	case Novel_5:
 		Novel_CH_5_Draw();
 		break;
-
 	case Game_1:
 		HanahudaMgr_Draw();
 		break;
-
 	case Game_2:
 		HanahudaMgr_Draw_2();
 		break;
-
 	case Game_3:
 		HanahudaMgr_Draw_3();
 		break;
-
 	case Game_4:
 		HanahudaMgr_Draw_4();
 		break;
-
 	case Config:
 		//Config_Draw();
 		break;
 	}
-
 }
 
-//ˆø” nextScene‚ÉƒV[ƒ“‚ğ•ÏX‚·‚é
+//å¼•æ•° nextSceneã«ã‚·ãƒ¼ãƒ³ã‚’å¤‰æ›´ã™ã‚‹
 void SceneMgr_ChangeScene(eScene nextScene) {
 
 	mNextScene = nextScene;
@@ -166,13 +140,13 @@ void SceneMgr_ChangeScene(eScene nextScene) {
 }
 
 
-//w’èƒ‚ƒWƒ…[ƒ‹‚ğ‰Šú‰»‚·‚é
+//æŒ‡å®šãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹
 static void SceneMgr_InitalizeModule(eScene scene) {
 	
-		switch (scene) {	//ƒV[ƒ“‚É‚æ‚Á‚ÄXVˆ—‚ğ•ªŠò
+		switch (scene) {	//ã‚·ãƒ¼ãƒ³ã«ã‚ˆã£ã¦æ›´æ–°å‡¦ç†ã‚’åˆ†å²
 
-		case Title:	//Œ»İƒV[ƒ“‚ªƒ^ƒCƒgƒ‹‚Ìê‡			
-			Title_Initialize();//ŠeƒV[ƒ“‚Ì‰Šú‰»‚ğ‚·‚éAˆÈ‰ºÈ—ª
+		case Title:	//ç¾åœ¨ã‚·ãƒ¼ãƒ³ãŒã‚¿ã‚¤ãƒˆãƒ«ã®å ´åˆ			
+			Title_Initialize();//å„ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–ã‚’ã™ã‚‹ã€ä»¥ä¸‹çœç•¥
 			break;
 		case Chapter:
 			Chapter_Initialize();
@@ -183,39 +157,30 @@ static void SceneMgr_InitalizeModule(eScene scene) {
 		case Novel_1:
 			//Novel_CH_1_Initialize();
 			break;
-
 		case Novel_2:
 			Novel_CH_2_Initialize();
 			break;
-
 		case Novel_3:
 			Novel_CH_3_Initialize();
 			break;
-
 		case Novel_4:
 			Novel_CH_4_Initialize();
 			break;
-
 		case Novel_5:
 			Novel_CH_5_Initialize();
 			break;
-
 		case Game_1:
 			HanahudaMgr_Initialize();
 			break;
-
 		case Game_2:
 			HanahudaMgr_Initialize_2();
 			break;
-
 		case Game_3:
 			HanahudaMgr_Initialize_3();
 			break;
-
 		case Game_4:
 			HanahudaMgr_Initialize_4();
 			break;
-
 		case Config:
 			//Config_Initialize();
 			break;
@@ -224,11 +189,10 @@ static void SceneMgr_InitalizeModule(eScene scene) {
 
 static void SceneMgr_FinalizeModule(eScene scene) {
 
-	
 	switch (scene) {
 
-	case Title:	//Œ»İƒV[ƒ“‚ªƒ^ƒCƒgƒ‹‚Ìê‡
-		Title_Finalize();	//ŠeƒV[ƒ“‚Ì‰Šú‰»‚ğ‚·‚éAˆÈ‰ºÈ—ª
+	case Title:	//ç¾åœ¨ã‚·ãƒ¼ãƒ³ãŒã‚¿ã‚¤ãƒˆãƒ«ã®å ´åˆ
+		Title_Finalize();	//å„ã‚·ãƒ¼ãƒ³ã®åˆæœŸåŒ–ã‚’ã™ã‚‹ã€ä»¥ä¸‹çœç•¥
 		break;
 	case Chapter:
 		Chapter_Finalize();
@@ -239,7 +203,6 @@ static void SceneMgr_FinalizeModule(eScene scene) {
 	case Novel_1:
 		//Novel_CH_1_Finalize();
 		break;
-
 	case Novel_2:
 		Novel_CH_2_Finalize();
 		break;
@@ -276,6 +239,5 @@ static void SceneMgr_FinalizeModule(eScene scene) {
 		//Config_Finalize();
 		break;
 	}
-
 }
 
