@@ -9,75 +9,65 @@
 #include "04_99.Hanahuda_Score_Modules.h"
 #include <time.h>
 
-
 //BGM
 static int BattleBGM = 0;
 
-//‰ÔD‚Ì‰Šú‰»ƒNƒ‰ƒX
+//èŠ±æœ­ã®åˆæœŸåŒ–ã‚¯ãƒ©ã‚¹
 Hanahuda_Card Card;
 
-//ƒvƒŒƒCƒ„[ƒNƒ‰ƒX
-Player player;	//ƒvƒŒƒCƒ„[Šî–{î•ñ
-Player enemy;	//“G‚ÌŠî–{î•ñ
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¯ãƒ©ã‚¹
+Player player;	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åŸºæœ¬æƒ…å ±
+Player enemy;	//æ•µã®åŸºæœ¬æƒ…å ±
 
-//ƒJ[ƒhƒiƒ“ƒo[”‚¦‚é—p
+//ã‚«ãƒ¼ãƒ‰ãƒŠãƒ³ãƒãƒ¼æ•°ãˆã‚‹ç”¨
 static int CardSel_NUM_ = 8;
-static int NowSelect = 0;	//‘I‘ğ’†‚ÌèD
+static int NowSelect = 0;	//é¸æŠä¸­ã®æ‰‹æœ­
 
+//ã‚·ãƒ¼ãƒ³é·ç§»
+static int GameScene_= Progress0;	//ã‚²ãƒ¼ãƒ å†…ã‚·ãƒ¼ãƒ³ã¯0ã‹ã‚‰å§‹ã¾ã‚‹
 
-//ƒV[ƒ“‘JˆÚ
-static int GameScene_= Progress0;	//ƒQ[ƒ€“àƒV[ƒ“‚Í0‚©‚çn‚Ü‚é
-
-
-//ƒvƒƒgƒ^ƒCƒvéŒ¾
-//ƒtƒ@ƒCƒ‹“à‚Å•K{‚ÌŒÄ‚Ño‚µŠÖ”B
-//Mgr`‚Æ‚Â‚­ŠÖ”‚Í‚±‚Ìƒtƒ@ƒCƒ‹“à‚ÌŠÖ”,ˆê”Ô‰º‚É‚ ‚éB‚»‚Ì‚Ù‚©‚ÌŠÖ”‚Í‚·‚×‚Äbattle_Modules.cpp‚ÉW–ñ
+//ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
+//ãƒ•ã‚¡ã‚¤ãƒ«å†…ã§å¿…é ˆã®å‘¼ã³å‡ºã—é–¢æ•°ã€‚
+//Mgrï½ã¨ã¤ãé–¢æ•°ã¯ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®é–¢æ•°,ä¸€ç•ªä¸‹ã«ã‚ã‚‹ã€‚ãã®ã»ã‹ã®é–¢æ•°ã¯ã™ã¹ã¦battle_Modules.cppã«é›†ç´„
 void Mgr_Player_Card_Placement();
 void Mgr_Enemy_Card_Placement();
 
 void Mgr_Player_Card_Move();
 void Mgr_Enemy_Card_Move();
 
-
-//-------------------------------------‚±‚±‚©‚çŠÇ——pƒƒCƒ“ŠÖ”------------------------------------------------
-
+//-------------------------------------ã“ã“ã‹ã‚‰ç®¡ç†ç”¨ãƒ¡ã‚¤ãƒ³é–¢æ•°------------------------------------------------
 									
-//‰Šú‰»ŠÇ—
+//åˆæœŸåŒ–ç®¡ç†
 void HanahudaMgr_Initialize() {
 	
-
 	player.MainScene_ = Progress0;
 	
-	//D‚Ì‰Šú‰»	
+	//æœ­ã®åˆæœŸåŒ–	
 	Card.Card_Modules_Initialize();	
 
-
-	//©•ªE“G‚ÌD‚ÌÅ‰‚ÌƒVƒƒƒbƒtƒ‹
+	//è‡ªåˆ†ãƒ»æ•µã®æœ­ã®æœ€åˆã®ã‚·ãƒ£ãƒƒãƒ•ãƒ«
 	player.Card_Moudules_First_Place(&player);
 	enemy.Card_Moudules_First_Place(&enemy);
 
-	//D‚ğ—”‚ÅƒVƒƒƒbƒtƒ‹‚·‚éi‚·‚­‚İE–ğ‹¤‚Éj
+	//æœ­ã‚’ä¹±æ•°ã§ã‚·ãƒ£ãƒƒãƒ•ãƒ«ã™ã‚‹ï¼ˆã™ãã¿ãƒ»å½¹å…±ã«ï¼‰
 	player.Card_Modules_YAKU_shuffle(&player, CardSel_NUM_);
 	enemy.Card_Modules_YAKU_shuffle(&enemy, CardSel_NUM_);
 
 	player.Card_Modules_3_shuffle(&player, CardSel_NUM_);
 	enemy.Card_Modules_3_shuffle(&enemy, CardSel_NUM_);
 		
-	//BGM‰Šú‰»
+	//BGMåˆæœŸåŒ–
 	BattleBGM = LoadSoundMem("sound/Battle_Stage_1.mp3");
 	ChangeVolumeSoundMem(160,BattleBGM);
 	PlaySoundMem(BattleBGM, DX_PLAYTYPE_LOOP);
 	
-
-	//—”
+	//ä¹±æ•°
 	srand((unsigned int)time(0));
-
 	
-	//‰æ‘œEÀ•WESEEƒtƒHƒ“ƒg‰Šú‰»ˆ—
+	//ç”»åƒãƒ»åº§æ¨™ãƒ»SEãƒ»ãƒ•ã‚©ãƒ³ãƒˆåˆæœŸåŒ–å‡¦ç†
 	player.Init_Battle(&player, &enemy, 1);
-
 	
-	//©•ªE“G‚ÌD‚ÌÀ•W‰Šú‰»
+	//è‡ªåˆ†ãƒ»æ•µã®æœ­ã®åº§æ¨™åˆæœŸåŒ–
 	for (int i = 0; i < 8; i++) {
 
 		player.cpos_x[i] = 100 + (i * 100);
@@ -85,148 +75,119 @@ void HanahudaMgr_Initialize() {
 
 		enemy.cpos_x[i] = 200 + (i * 100);
 		enemy.cpos_y[i] = 100;
-
 	}
 
-	//HP‚Ì‰Šú‰»
+	//HPã®åˆæœŸåŒ–
 	/*player.HP = 5000;
 	enemy.HP = 1000;*/
 
-	//“G‚ÌUŒ‚À•W‚ÌXV
+	//æ•µã®æ”»æ’ƒåº§æ¨™ã®æ›´æ–°
 	enemy.AT_pos_x = 1200;
 	enemy.AT_pos_y = -300;
-	
-
 }
 
 
-//I—¹ˆ—
+//çµ‚äº†å‡¦ç†
 void HanahudaMgr_Finalize() {
 	
 	Card.Card_Modules_Finalize();
 	DeleteSoundMem(BattleBGM);
 
 	player.Finalize_Battle(&player);
-	enemy.Finalize_Battle(&enemy);
-	
-
+	enemy.Finalize_Battle(&enemy);	
 }
 
 
-//XVEŒvZŠÇ—
+//æ›´æ–°ãƒ»è¨ˆç®—ç®¡ç†
 void HanahudaMgr_Update() {
 
-	//”wŒi•\¦
+	//èƒŒæ™¯è¡¨ç¤º
 	DrawRotaGraph(512, 350, 1.0f, 0, player.Back_Image, true);
 	player.System_Messeage(&player,&enemy);
 
-	if (player.MainScene_ == Progress0) {	//ŠJn‡}
+	if (player.MainScene_ == Progress0) {	//é–‹å§‹åˆå›³
 
 		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {	
 	
 			player.MainScene_ = Progress1;
-
 		}
-
-
-
 	}	
-	else if (player.MainScene_ == Progress1) {	//©•ªƒJ[ƒh‚ÌˆÚ“®ƒ^[ƒ“
+	else if (player.MainScene_ == Progress1) {	//è‡ªåˆ†ã‚«ãƒ¼ãƒ‰ã®ç§»å‹•ã‚¿ãƒ¼ãƒ³		
 		
-		
-		//yŠÖ”zUŒ‚E‰ñ•œ‚Ìƒƒjƒ…[•\¦
+		//ã€é–¢æ•°ã€‘æ”»æ’ƒãƒ»å›å¾©ã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼è¡¨ç¤º
 		player.Card_Modules_Menu(&player);
-
 		
 	}
-	else if (player.MainScene_ == Progress2) {	//ŒvZEUŒ‚ˆ—1
+	else if (player.MainScene_ == Progress2) {	//è¨ˆç®—ãƒ»æ”»æ’ƒå‡¦ç†1
 		
-		Mgr_Player_Card_Move();	//©•ªƒJ[ƒh‚ÌˆÚ“®ŠÖ”
+		Mgr_Player_Card_Move();	//è‡ªåˆ†ã‚«ãƒ¼ãƒ‰ã®ç§»å‹•é–¢æ•°
 
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {	//å‡ºã™æœ­ã®æ±ºå®šã™ã‚‹
 
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) {	//o‚·D‚ÌŒˆ’è‚·‚é
-
-			player.Moudules_Myplayer_YAKUScore_RETURN(&player);	//Œˆ’è‚Æ‹¤‚É©ƒvƒŒƒCƒ„[‚Ì–ğƒXƒRƒA‚ÌŒvZ‚ğ‚·‚é
-			player.Game_Start = true; //D‚ğ3–‡ˆÈãã‚°‚é‚±‚Æ‚ğ§Œä
-			player.Count_3 = 4;	 //D‚ğ3–‡ˆÈãã‚°‚é‚±‚Æ‚ğ§Œä
-
+			player.Moudules_Myplayer_YAKUScore_RETURN(&player);	//æ±ºå®šã¨å…±ã«è‡ªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½¹ã‚¹ã‚³ã‚¢ã®è¨ˆç®—ã‚’ã™ã‚‹
+			player.Game_Start = true; //æœ­ã‚’3æšä»¥ä¸Šä¸Šã’ã‚‹ã“ã¨ã‚’åˆ¶å¾¡
+			player.Count_3 = 4;	 //æœ­ã‚’3æšä»¥ä¸Šä¸Šã’ã‚‹ã“ã¨ã‚’åˆ¶å¾¡
 		}
 
 
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//ŸƒV[ƒ“‚ÖˆÚ“®
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//æ¬¡ã‚·ãƒ¼ãƒ³ã¸ç§»å‹•
 
-			Mgr_Enemy_Card_Move();								//ƒV[ƒ“ˆÚ“®‚Æ“¯‚É“G‚ÌƒJ[ƒhŒvZ‚ğs‚¤
-			enemy.Moudules_Enemy_Card_Place(&player, &enemy);	///ƒV[ƒ“ˆÚ“®‚Æ“¯‚É“G‚ÌƒJ[ƒhŒvZ‚µA•‘‘ä‚É3–‡o‚·iƒvƒŒƒCƒ„[ƒJ[ƒh‚ğŒvZ‚µ‚Ä”»’fj
+			Mgr_Enemy_Card_Move();								//ã‚·ãƒ¼ãƒ³ç§»å‹•ã¨åŒæ™‚ã«æ•µã®ã‚«ãƒ¼ãƒ‰è¨ˆç®—ã‚’è¡Œã†
+			enemy.Moudules_Enemy_Card_Place(&player, &enemy);	///ã‚·ãƒ¼ãƒ³ç§»å‹•ã¨åŒæ™‚ã«æ•µã®ã‚«ãƒ¼ãƒ‰è¨ˆç®—ã—ã€èˆå°ã«3æšå‡ºã™ï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚«ãƒ¼ãƒ‰ã‚’è¨ˆç®—ã—ã¦åˆ¤æ–­ï¼‰
 			enemy.Moudules_Enemy_YAKUScore_RETURN(&enemy);
-			player.Moudules_All_Score_RETURN(&player, &enemy);	//3‚·‚­‚İE–ğ‚Ì“_”‚ğ‡Z
-
-
+			player.Moudules_All_Score_RETURN(&player, &enemy);	//3ã™ãã¿ãƒ»å½¹ã®ç‚¹æ•°ã‚’åˆç®—
 			player.MainScene_ = Progress3;
 		}
 		
 
 	}
-	else if (player.MainScene_ == Progress3) {	//ŒvZEUŒ‚ˆ—2
+	else if (player.MainScene_ == Progress3) {	//è¨ˆç®—ãƒ»æ”»æ’ƒå‡¦ç†2
 	
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//ŸƒV[ƒ“‚ÖˆÚ“®
-
-
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//æ¬¡ã‚·ãƒ¼ãƒ³ã¸ç§»å‹•
 			player.MainScene_ = Progress4;
-
 		}
 
 		
 	}
-	else if (player.MainScene_ == Progress4) {	//ŒvZEUŒ‚ˆ—3
+	else if (player.MainScene_ == Progress4) {	//è¨ˆç®—ãƒ»æ”»æ’ƒå‡¦ç†3
 		
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//ŸƒV[ƒ“‚ÖˆÚ“®
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//æ¬¡ã‚·ãƒ¼ãƒ³ã¸ç§»å‹•
 
-			//©•ª‚ÌUŒ‚ƒ‚[ƒVƒ‡ƒ“‰Šú‰»EŠÔ‚ª‚ ‚Á‚½‚çƒ‚ƒWƒ…[ƒ‹cpp‚ÉˆÚ“®
+			//è‡ªåˆ†ã®æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³åˆæœŸåŒ–ãƒ»æ™‚é–“ãŒã‚ã£ãŸã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«cppã«ç§»å‹•
 			player.Modules_Attack_init(&player, &enemy);
 
-			player.Moudules_Player_Attack(&player, &enemy, 0);//©ƒvƒŒƒCƒ„[‚ÌUŒ‚ˆ—(‚·‚­‚İ)
-			enemy.Moudules_Enemy_Attack(&player, &enemy, 0);//“G‚ÌUŒ‚ˆ—	
-
-
+			player.Moudules_Player_Attack(&player, &enemy, 0);//è‡ªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒå‡¦ç†(ã™ãã¿)
+			enemy.Moudules_Enemy_Attack(&player, &enemy, 0);//æ•µã®æ”»æ’ƒå‡¦ç†	
 			player.MainScene_ = Progress5;
 			//player.AT_Wait[0] = false;
-
 		}
 
 		
 	}
-	else if (player.MainScene_ == Progress5) {	//DƒVƒƒƒbƒtƒ‹E‰Šú‰»
+	else if (player.MainScene_ == Progress5) {	//æœ­ã‚·ãƒ£ãƒƒãƒ•ãƒ«ãƒ»åˆæœŸåŒ–
 		
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//ŸƒV[ƒ“‚ÖˆÚ“®
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_SPACE)) {	//æ¬¡ã‚·ãƒ¼ãƒ³ã¸ç§»å‹•
 
+			player.Moudules_Player_Attack(&player, &enemy, 1);//è‡ªãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒå‡¦ç†(å½¹)		
+			enemy.Moudules_Enemy_Attack(&player, &enemy, 1);//æ•µã®æ”»æ’ƒå‡¦ç†	
 
-			player.Moudules_Player_Attack(&player, &enemy, 1);//©ƒvƒŒƒCƒ„[‚ÌUŒ‚ˆ—(–ğ)		
-			enemy.Moudules_Enemy_Attack(&player, &enemy, 1);//“G‚ÌUŒ‚ˆ—	
-
-			//“G‚ÌUŒ‚ƒ‚[ƒVƒ‡ƒ“‰Šú‰»EŠÔ‚ª‚ ‚Á‚½‚çƒ‚ƒWƒ…[ƒ‹cpp‚ÉˆÚ“®
+			//æ•µã®æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³åˆæœŸåŒ–ãƒ»æ™‚é–“ãŒã‚ã£ãŸã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«cppã«ç§»å‹•
 			player.Modules_Attack_init(&player, &enemy);
 
 			if (player.HP <= 0 || enemy.HP <= 0) {
 
 				player.MainScene_ = Progress7;
-
 			}
 			else {
-
 				player.MainScene_ = Progress6;
-
 			}
 
-
-
 		}
-		
-		
-		
+				
 	}
 	else if (player.MainScene_ == Progress6) {
 
-		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) { //Progress0‚É–ß‚é
+		if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RETURN)) { //Progress0ã«æˆ»ã‚‹
 
 			player.Card_Moudules_YAKU_Reshaffle(&player, 8,1);
 			enemy.Card_Moudules_YAKU_Reshaffle(&enemy, 8,2);
@@ -238,101 +199,71 @@ void HanahudaMgr_Update() {
 
 	}
 	else if (player.MainScene_ == Progress7) {
-
-
-		//‡I—¹
-
-
+		//è©¦åˆçµ‚äº†
 	}
 	else if (player.MainScene_ == Progress8) {
-
-
 		player.Card_Modules_Recovery_Menu(&player);
-
-
-
 	}
 	else if (player.MainScene_ == Progress9) {
-
-
-		//ƒwƒ‹ƒv‰æ–Ê
-
-
+		//ãƒ˜ãƒ«ãƒ—ç”»é¢
 	}
 	else if (player.MainScene_ == Progress10) {
-
-
-		//–ğˆê——
-
-
+		//å½¹ä¸€è¦§
 	}
 	else if (player.MainScene_ == Progress11) {
-
-
-
-		//–ß‚é‰æ–Ê‚Ì•\¦
+		//æˆ»ã‚‹ç”»é¢ã®è¡¨ç¤º
 		player.Card_Modules_Back_Menu(&player);
-
-
 	}
-
-	
-
 	
 }
 
 
-//•`‰æŠÇ—
+//æç”»ç®¡ç†
 void HanahudaMgr_Draw() {
 		
-	//ƒvƒŒƒCƒ„[HPƒo[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼HPãƒãƒ¼
 	player.HP_now =1.0f * ( (float)player.HP / 5000.0f);
 
-	//enemyHPƒo[
+	//enemyHPãƒãƒ¼
 	enemy.HP_now = 1.0f * ((float)enemy.HP / 5000.0f);
 
-
-	//©•ª‚ÌèD‚ğ”z’u	
+	//è‡ªåˆ†ã®æ‰‹æœ­ã‚’é…ç½®	
 	Mgr_Player_Card_Placement();
 
-	//“G‚ÌèD‚Ì”z’u
+	//æ•µã®æ‰‹æœ­ã®é…ç½®
 	Mgr_Enemy_Card_Placement();
-
 	
-	//HPƒo[
+	//HPãƒãƒ¼
 	DrawRotaGraph3(20, 700, 0, 0, player.HP_now, 0.5f, 0, player.HP_var, TRUE);
 	DrawStringEx(20, 675, -1, "HP:%d / %d", player.HP, 5000);
 	
-	//HPE“Gƒo[
+	//HPãƒ»æ•µãƒãƒ¼
 	DrawRotaGraph3(700, 50, 0, 0, enemy.HP_now, 0.5f, 0, enemy.HP_var, TRUE);
 	DrawStringEx(700, 25, -1, "HP:%d / %d", enemy.HP, 5000);
 
-	//ŠJn‡}‚ÌŠÖ”
+	//é–‹å§‹åˆå›³ã®é–¢æ•°
 	player.Modules_Battle_Start(&player);
 	
-	//3‚·‚­‚İ‚ÌUŒ‚ƒ‚[ƒVƒ‡ƒ“iSE‚Æ—§‚¿ŠG‚Æ‰¹Šy‚Ì•\¦jEProgress3‚Ì”­“®
+	//3ã™ãã¿ã®æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ï¼ˆSEã¨ç«‹ã¡çµµã¨éŸ³æ¥½ã®è¡¨ç¤ºï¼‰ãƒ»Progress3ã®æ™‚ç™ºå‹•
 	player.Modules_Attack_Motion(&player,&enemy,Progress4);
 
-
-	//–ğ‚ÌUŒ‚ƒ‚[ƒVƒ‡ƒ“
+	//å½¹ã®æ”»æ’ƒãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³
 	player.Modules_Attack_Motion_YAKU(&player, &enemy, Progress5);
 
-
-	//resurtŒ‹‰Ê‚Ì•\¦
+	//resurtçµæœã®è¡¨ç¤º
 	player.Modules_Result(&player, &enemy,2);
 
-	//ƒwƒ‹ƒv‰æ–Ê‚Ì•\¦
+	//ãƒ˜ãƒ«ãƒ—ç”»é¢ã®è¡¨ç¤º
 	player.Card_Modules_Help(&player, Progress9);
 
-	//–ğˆê——ƒŠƒXƒg‚Ì•\¦
+	//å½¹ä¸€è¦§ãƒªã‚¹ãƒˆã®è¡¨ç¤º
 	player.Card_Modules_YakuList(&player, Progress10);
-
 			
 	/*DrawStringEx(50, 700, -1, "MY HP: %d", player.HP);
 	DrawStringEx(50, 730, -1, "TotalScore: %d", player.TotalScore);
 	DrawStringEx(50, 100, -1, "ENEMY HP: %d", enemy.HP);
 	DrawStringEx(40, 130, -1, "TotalScore: %d", enemy.TotalScore);
-	DrawStringEx(50, 250, -1, "ƒQ[ƒ€ƒV[ƒ“ƒiƒ“ƒo[ : %d", player.MainScene_);
+	DrawStringEx(50, 250, -1, "ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ãƒŠãƒ³ãƒãƒ¼ : %d", player.MainScene_);
 	DrawStringEx(50, 400, -1, "AT_count: %d", player.AT_counter);*/
 
 	//
@@ -349,129 +280,99 @@ void HanahudaMgr_Draw() {
 	//DrawStringEx(800, 490, -1, "nov : %d", player.Oct);
 	//DrawStringEx(800, 520, -1, "dec : %d", player.Oct);
 
-
 	/*DrawStringEx(50, 330, -1, "Ene_Sukim_3_Coun0:%d", enemy.Ene_Sukim_3_Count[0]);
 	DrawStringEx(50, 360, -1, "Ene_Sukim_3_Coun1:%d", enemy.Ene_Sukim_3_Count[1]);
 	DrawStringEx(50, 390, -1, "Ene_Sukim_3_Coun2:%d", enemy.Ene_Sukim_3_Count[2]);
 	DrawStringEx(50, 410, -1, "enemy.Count_3:%d", enemy.Count_3);*/
-
-
 	/*for (int i = 0; i < 8; i++) {
 
 		DrawStringEx(50+(i*30),270, -1, " %d", player.YAKU_R[i]);
 
 	}*/
-
 	
-
-
 }
 
-//-------------------------------------‚±‚±‚©‚çŒÄ‚Ño‚µ—pŠÖ”-------------------------------------------------
+//-------------------------------------ã“ã“ã‹ã‚‰å‘¼ã³å‡ºã—ç”¨é–¢æ•°-------------------------------------------------
 
-//•`‰æE‰ÔD‚Ì”z’uŠÖ”
-void Mgr_Player_Card_Placement() {	//©•ª‚Ì‰ÔD”z’u
+//æç”»ãƒ»èŠ±æœ­ã®é…ç½®é–¢æ•°
+void Mgr_Player_Card_Placement() {	//è‡ªåˆ†ã®èŠ±æœ­é…ç½®
 
 	for (int i = 0; i < 8; i++) {
-
-
-		if (player.Huda_UP[i] ) {
-			
+		if (player.Huda_UP[i] ) {			
 			player.cpos_y[i] = 450;
-
 		}		
-		else if (i == NowSelect) {
-
-			
+		else if (i == NowSelect) {			
 			player.cpos_x[i] = 100 + (i * 100);
 			player.cpos_y[i] = 500;
-
 		}
 		else {
-
 			player.cpos_x[i] = 100+(i *100);
 			player.cpos_y[i] = 600;
-
 		}
 
-		//—”“ü‚ê‚İ		
+		//ä¹±æ•°å…¥ã‚Œè¾¼ã¿		
 		player.cYaku_Num = player.YAKU_R[i];
-		//player.cYaku_Num = 0;	//ƒeƒXƒg
+		//player.cYaku_Num = 0;	//ãƒ†ã‚¹ãƒˆ
 		player.c3_Num1 = player.Sukumi_R[i];
 	
-
 		DrawRotaGraph(player.cpos_x[i] , player.cpos_y[i], 1.0f, 0, Card.Card[player.uraomote][player.cYaku_Num][player.c3_Num1], true);
 		//DrawRotaGraph(player.cpos_x[i] + (i * 100), player.cpos_y[i], 1.0f, 0, Card.Card[player.uraomote][0][0], true);
-
 	}
 
 }
 
-void Mgr_Enemy_Card_Placement() {	//“G‚Ì‰ÔD”z’u
+void Mgr_Enemy_Card_Placement() {	//æ•µã®èŠ±æœ­é…ç½®
 
 	for (int i = 0; i < 8; i++) {
 
-		//—”“ü‚ê‚İ		
-		enemy.cYaku_Num = enemy.YAKU_R[i];	//ƒeƒXƒg’†		
+		//ä¹±æ•°å…¥ã‚Œè¾¼ã¿		
+		enemy.cYaku_Num = enemy.YAKU_R[i];	//ãƒ†ã‚¹ãƒˆä¸­		
 		enemy.c3_Num1 = enemy.Sukumi_R[i];
-		
-	
+			
 		if (enemy.Huda_UP[i]) {
-
 			enemy.cpos_y[i] = 300;
-
 		}
 		else {
 
 			enemy.cpos_x[i] = 200 + (i * 100);
 			enemy.cpos_y[i] = 150;
-
 		}
 		
-		DrawRotaGraph(enemy.cpos_x[i], enemy.cpos_y[i], 1.0f, 0, Card.Card[enemy.uraomote][enemy.cYaku_Num][enemy.c3_Num1], true);
-		
+		DrawRotaGraph(enemy.cpos_x[i], enemy.cpos_y[i], 1.0f, 0, Card.Card[enemy.uraomote][enemy.cYaku_Num][enemy.c3_Num1], true);		
 	}
 
 }
 
 
-//©•ª‚ÌƒJ[ƒh‚ÌˆÚ“®ˆ—
+//è‡ªåˆ†ã®ã‚«ãƒ¼ãƒ‰ã®ç§»å‹•å‡¦ç†
 void Mgr_Player_Card_Move() {
 	
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RIGHT) && player.Game_Start == false) {	//‰E‚ÉˆÚ“®
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_RIGHT) && player.Game_Start == false) {	//å³ã«ç§»å‹•
 
 		NowSelect = (NowSelect + 1) % CardSel_NUM_;
-
 	}
 
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_LEFT) && player.Game_Start == false) {	//¶‚ÉˆÚ“®
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_LEFT) && player.Game_Start == false) {	//å·¦ã«ç§»å‹•
 
 		NowSelect = (NowSelect + (CardSel_NUM_ -1)) % CardSel_NUM_;
-
 		for (int i = 0; i < 8; i++) {
 	
 			if (player.Huda_UP[i] ) {
-
 				player.cpos_y[i] = 450;
-
 			}
 			else if (i == NowSelect) {
-
 				player.cpos_y[i] = 500;
-
 			}
 			else {
-
 				player.cpos_y[i] = 600;
 
-			}
-			
+			}			
 		}
 
 	}
 
 	
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP) && player.Game_Start == false) {	//•‘‘ä‚Éo‚·DŒó•â‚ğŒˆ’è‚·‚é
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_UP) && player.Game_Start == false) {	//èˆå°ã«å‡ºã™æœ­å€™è£œã‚’æ±ºå®šã™ã‚‹
 
 		for (int i = 0; i < 8; i++) {
 
@@ -482,9 +383,8 @@ void Mgr_Player_Card_Move() {
 				player.Huda_UP[SelectNum_r] = true;
 				player.UR_Storage[SelectNum_r] = eCard_Omote;
 				player.YAKU1_Storage[SelectNum_r] = player.YAKU_R[SelectNum_r];
-				//player.YAKU1_Storage[SelectNum_r] = 0;	//ƒeƒXƒg
-								
-				
+				//player.YAKU1_Storage[SelectNum_r] = 0;	//ãƒ†ã‚¹ãƒˆ
+												
 				if (player.Count_3 == 1) {
 				
 					player.SUKUMI_Storage[0] = player.Sukumi_R[SelectNum_r];
@@ -511,7 +411,7 @@ void Mgr_Player_Card_Move() {
 
 	}
 
-	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN) && player.Game_Start == false) {	//D‚ğ‰º‚°‚é
+	if (t2k::Input::isKeyDownTrigger(t2k::Input::KEYBORD_DOWN) && player.Game_Start == false) {	//æœ­ã‚’ä¸‹ã’ã‚‹
 
 		for (int i = 0; i < 8; i++) {
 			
@@ -520,7 +420,6 @@ void Mgr_Player_Card_Move() {
 			player.UR_Storage[i] = eCard_Omote;
 			player.YAKU1_Storage[i] = 99;
 			player.SUKUMI_Storage[i] = 99;		
-
 		}
 
 		player.TotalScore = 0;
@@ -539,10 +438,9 @@ void Mgr_Player_Card_Move() {
 	
 	}
 
-
 }
 
-//“G‚ÌƒJ[ƒh‚ÌˆÚ“®ˆ—
+//æ•µã®ã‚«ãƒ¼ãƒ‰ã®ç§»å‹•å‡¦ç†
 void Mgr_Enemy_Card_Move() {
 		
 	for (int i = 0; i < 8; i++) {
@@ -550,13 +448,8 @@ void Mgr_Enemy_Card_Move() {
 		enemy.UR_Storage[i] = eCard_Omote;
 		enemy.YAKU1_Storage[i] = enemy.YAKU_R[i];	
 		enemy.SUKUMI_Storage[i] = enemy.Sukumi_R[i];		
-
 	}
 	
-
-
-
-
 }
 
 
