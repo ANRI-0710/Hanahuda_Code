@@ -1,13 +1,13 @@
 #pragma once
 
 //---------------------------------------------
-//ƒmƒxƒ‹ƒV[ƒ“‚Åg—p‚·‚éƒ‚ƒWƒ…[ƒ‹i‰æ‘œ/ŠÖ”j‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+//ãƒãƒ™ãƒ«ã‚·ãƒ¼ãƒ³ã§ä½¿ç”¨ã™ã‚‹ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ï¼ˆç”»åƒ/é–¢æ•°ï¼‰ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
 //---------------------------------------------
 
 class NovelModules {
 public:
 
-	//ålŒöEçÎE—§‚¿ŠGEHi’ÊíjASiÎŠçjAIi“{‚èjAOi‹Á‚«jAKi”ß‚µ‚İjAAiÅ‚èj
+	//ä¸»äººå…¬ãƒ»åƒæ­³ãƒ»ç«‹ã¡çµµãƒ»Hï¼ˆé€šå¸¸ï¼‰ã€Sï¼ˆç¬‘é¡”ï¼‰ã€Iï¼ˆæ€’ã‚Šï¼‰ã€Oï¼ˆé©šãï¼‰ã€Kï¼ˆæ‚²ã—ã¿ï¼‰ã€Aï¼ˆç„¦ã‚Šï¼‰
 	int Tatie_00_H;
 	int Tatie_00_S;
 	int Tatie_00_I_1;
@@ -15,88 +15,80 @@ public:
 	int Tatie_00_O;
 	int Tatie_00_A;
 
-	//—Á‰Ô
+	//æ¶¼èŠ±
 	int Tatie_01_H; 
 	int Tatie_01_I;
 	int Tatie_01_K;
 	int Tatie_01_S;
 
-	//•¶EH
+	//æ–‡é¦™ãƒ»ç§‹
 	int Tatie_02_H;
 	int Tatie_02_I;
 	int Tatie_02_K;
 	int Tatie_02_S;
 	
-	//“~‰¹i‚Ó‚ä‚ËjE‰¼–Ê
+	//å†¬éŸ³ï¼ˆãµã‚†ã­ï¼‰ãƒ»ä»®é¢
 	int Tatie_03_H_kamen;
 		
-	//“~‰¹i‚Ó‚ä‚ËjE’Êí
+	//å†¬éŸ³ï¼ˆãµã‚†ã­ï¼‰ãƒ»é€šå¸¸
 	int Tatie_03_H;
 	int Tatie_03_I;
 	int Tatie_03_O;
 	int Tatie_03_S;
 	int Tatie_03_S_2;
-
 	
-	//‰Ø—éi‚©‚è‚ñjE“~
+	//è¯éˆ´ï¼ˆã‹ã‚Šã‚“ï¼‰ãƒ»å†¬
 	int Tatie_04_H;
 	int Tatie_04_H_2;
 	int Tatie_04_K;
 
-	//‰Ø™zEŒÏ”Å
+	//è¯å‡›ãƒ»ç‹ç‰ˆ
 	int Tatie_04_02_H;
 	int Tatie_04_02_H_2;
 	int Tatie_04_02_K;
 		
-	//ŒÏ
+	//ç‹
 	int Tatie_05; 
-	//ƒ‚ƒu
+	//ãƒ¢ãƒ–
 	int Tatie_MOBU_H;
 
 	//BGM
-	int BGM1;	//’ÊíEƒnƒbƒs[
-	int BGM2;	//•s‰¸1
-	int BGM3;	//•s‰¸2
-	int BGM4;	//ƒ‰ƒXƒ{ƒX“oê
-	int BGM5;	//ÅŒã
+	int BGM1;	//é€šå¸¸ãƒ»ãƒãƒƒãƒ”ãƒ¼
+	int BGM2;	//ä¸ç©1
+	int BGM3;	//ä¸ç©2
+	int BGM4;	//ãƒ©ã‚¹ãƒœã‚¹ç™»å ´
+	int BGM5;	//æœ€å¾Œ
 
-	//”wŒi
+	//èƒŒæ™¯
 	int Back_01;
 	int Back_02;
 	int Back_03;
 	int Back_04;
 	int Back_05;
 
-	//‰ï˜bƒ{ƒbƒNƒX
+	//ä¼šè©±ãƒœãƒƒã‚¯ã‚¹
 	int kaiwabokkusu;
 	int namae;
 
-	//yŠÖ”z‰Šú‰»ŠÖ”
+	//ã€é–¢æ•°ã€‘åˆæœŸåŒ–é–¢æ•°
 	void Novel_Init(NovelModules* novel);
 
-	//yŠÖ”z‰Šú‰»ŠÖ”
+	//ã€é–¢æ•°ã€‘åˆæœŸåŒ–é–¢æ•°
 	void Novel_Fin(NovelModules* novel);
 
-
-	//yŠÖ”z‰ï˜bƒ{ƒbƒNƒX‚É“ü‚é‚æ‚¤‚ÉƒZƒŠƒt‚ğ“ü‚ê‚éŠÖ”EƒZƒŠƒt‚ğŠÖ”‚Å“n‚µ‚Ä•\¦
+	//ã€é–¢æ•°ã€‘ä¼šè©±ãƒœãƒƒã‚¯ã‚¹ã«å…¥ã‚‹ã‚ˆã†ã«ã‚»ãƒªãƒ•ã‚’å…¥ã‚Œã‚‹é–¢æ•°ãƒ»ã‚»ãƒªãƒ•ã‚’é–¢æ•°ã§æ¸¡ã—ã¦è¡¨ç¤º
 	void Novel(std::string a, std::string b, std::string c, std::string d);
 
-	//yŠÖ”z
+	//ã€é–¢æ•°ã€‘
 	void Tatie_LEFT(int tatie);
 
-	//yŠÖ”z
+	//ã€é–¢æ•°ã€‘
 	void Tatie_CENTER(int tatie);
 
-	//yŠÖ”z
+	//ã€é–¢æ•°ã€‘
 	void Tatie_Right(int tatie);
 	
-	//yŠÖ”z
+	//ã€é–¢æ•°ã€‘
 	void Tatie_BACKIMAGE(int tatie);
-
-
-
-
-
-
 
 };
